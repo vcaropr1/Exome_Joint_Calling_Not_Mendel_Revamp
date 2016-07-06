@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SAMPLE_SHEET=$1
-MS_VCF_PREFIX=$2
+VCF_FILE=$2
 
 sed 's/\r//g' $SAMPLE_SHEET \
 | awk 'BEGIN {FS=","} NR>1 {print $1,$8,$17,$15,$18}' \
