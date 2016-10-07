@@ -6,10 +6,11 @@
 
 JAVA_1_7=$1
 GATK_3_1_1_DIR=$2
-REF_GENOME=$3
-CORE_PATH=$4
-PROJECT=$5
-PREFIX=$6
+KEY=$3
+REF_GENOME=$4
+CORE_PATH=$5
+PROJECT=$6
+PREFIX=$7
 
 $JAVA_1_7/java -cp $GATK_3_1_1_DIR/GenomeAnalysisTK.jar \
 org.broadinstitute.gatk.tools.CatVariants \
@@ -39,6 +40,8 @@ org.broadinstitute.gatk.tools.CatVariants \
 --variant $CORE_PATH/$PROJECT/MULTI_SAMPLE/$PREFIX".22.normal.vcf" \
 --variant $CORE_PATH/$PROJECT/MULTI_SAMPLE/$PREFIX".X.normal.vcf" \
 --variant $CORE_PATH/$PROJECT/MULTI_SAMPLE/$PREFIX".Y.normal.vcf" \
+-et NO_ET \
+-K $KEY \
 -out $CORE_PATH/$PROJECT/MULTI_SAMPLE/$PREFIX".raw.HC.vcf"
 
 
