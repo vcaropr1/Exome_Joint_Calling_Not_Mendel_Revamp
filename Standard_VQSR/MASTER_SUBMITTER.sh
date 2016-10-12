@@ -41,7 +41,7 @@ VERACODE_CSV=/isilon/sequencing/CIDRSeqSuiteSoftware/resources/Veracode_hg18_hg1
 
 CREATE_PROJECT_INFO_ARRAY ()
 {
-PROJECT_INFO_ARRAY=(`sed 's/\r//g' $SAMPLE_SHEET | awk 'BEGIN{FS=","} NR>1 {print $1,$15,$23}' | sed 's/,/\t/g' | sort -k 1,1 | awk '$1=="'$PROJECT'" {print $1,$2,$3}' | sort | uniq`)
+PROJECT_INFO_ARRAY=(`sed 's/\r//g' $SAMPLE_SHEET | awk 'BEGIN{FS=","} NR>1 {print $1,$12,$18}' | sed 's/,/\t/g' | sort -k 1,1 | awk '$1=="'$PROJECT'" {print $1,$2,$3}' | sort | uniq`)
 
 PROJECT_NAME=${PROJECT_INFO_ARRAY[0]}
 REF_GENOME=${PROJECT_INFO_ARRAY[1]}
@@ -204,7 +204,7 @@ echo \
 
 CREATE_SAMPLE_INFO_ARRAY ()
 {
-SAMPLE_INFO_ARRAY=(`sed 's/\r//g' $SAMPLE_SHEET | awk 'BEGIN{FS=","} NR>1 {print $1,$9,$20,$18,$23,$15}' | sed 's/,/\t/g' | sort -k 8,8 | uniq | awk '$2=="'$SAMPLE'" {print $1,$2,$3,$4,$5,$6}'`)
+SAMPLE_INFO_ARRAY=(`sed 's/\r//g' $SAMPLE_SHEET | awk 'BEGIN{FS=","} NR>1 {print $1,$8,$17,$15,$18,$12}' | sed 's/,/\t/g' | sort -k 8,8 | uniq | awk '$2=="'$SAMPLE'" {print $1,$2,$3,$4,$5,$6}'`)
 
 PROJECT_SAMPLE=${SAMPLE_INFO_ARRAY[0]}
 SM_TAG=${SAMPLE_INFO_ARRAY[1]}
@@ -393,7 +393,7 @@ CALCULATE_GENOTYPE_POSTERIORS
 VARIANT_ANNOTATOR_REFINED
 BGZIP_AND_TABIX_REFINED_VCF
 
-for SAMPLE in $(awk 'BEGIN {FS=","} NR>1 {print $9}' $SAMPLE_SHEET | sort | uniq )
+for SAMPLE in $(awk 'BEGIN {FS=","} NR>1 {print $8}' $SAMPLE_SHEET | sort | uniq )
 do
 CREATE_SAMPLE_INFO_ARRAY
 SELECT_PASSING_VARIANTS_PER_SAMPLE
