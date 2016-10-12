@@ -9,10 +9,12 @@ JAVA_1_7=$1
 GATK_DIR=$2
 KEY=$3
 REF_GENOME=$4
+KNOWN_SNPS=$5
 
-CORE_PATH=$5
-PROJECT=$6
-SM_TAG=$7
+CORE_PATH=$6
+PROJECT=$7
+SM_TAG=$8
+TITV_BED=$9
 
 CMD=$JAVA_1_7'/java -jar'
 CMD=$CMD' '$GATK_DIR'/GenomeAnalysisTK.jar'
@@ -22,13 +24,14 @@ CMD=$CMD' -et NO_ET'
 CMD=$CMD' -K '$KEY
 CMD=$CMD' -R '$REF_GENOME
 CMD=$CMD' -sn '$SM_TAG
-CMD=$CMD' -ef'
-CMD=$CMD' -env'
-CMD=$CMD' --keepOriginalAC'
-CMD=$CMD' -selectType INDEL'
 CMD=$CMD' --variant '$CORE_PATH'/'$PROJECT'/VCF/RELEASE/FILTERED_ON_BAIT/'$SM_TAG'_MS_OnBait.vcf'
-CMD=$CMD' -o '$CORE_PATH'/'$PROJECT'/INDEL/RELEASE/FILTERED_ON_BAIT/'$SM_TAG'_MS_OnBait_INDEL.vcf'
-
+CMD=$CMD' --excludeFiltered'
+CMD=$CMD' --excludeNonVariants'
+CMD=$CMD' --keepOriginalAC'
+CMD=$CMD' -L '$TITV_BED
+CMD=$CMD' --concordance '$KNOWN_SNPS
+CMD=$CMD' -selectType SNP'
+CMD=$CMD' -o '$CORE_PATH'/'$PROJECT'/TEMP/'$SM_TAG'.Release.Known.TiTv.vcf'
 
 # $JAVA_1_7/java -jar $GATK_DIR/GenomeAnalysisTK.jar \
 # -T SelectVariants \
@@ -37,12 +40,14 @@ CMD=$CMD' -o '$CORE_PATH'/'$PROJECT'/INDEL/RELEASE/FILTERED_ON_BAIT/'$SM_TAG'_MS
 # -K $KEY \
 # -R $REF_GENOME \
 # -sn $SM_TAG \
-# -ef \
-# -env \
-# --keepOriginalAC \
-# -selectType INDEL \
 # --variant $CORE_PATH/$PROJECT/VCF/RELEASE/FILTERED_ON_BAIT/$SM_TAG"_MS_OnBait.vcf" \
-# -o $CORE_PATH/$PROJECT/INDEL/RELEASE/FILTERED_ON_BAIT/$SM_TAG"_MS_OnBait_INDEL.vcf"
+# --excludeFiltered \
+# --excludeNonVariants \
+# --keepOriginalAC \
+# -L $TITV_BED \
+# --concordance $KNOWN_SNPS \
+# -selectType SNP \
+# -o $CORE_PATH/$PROJECT/TEMP/$SM_TAG".Release.Known.TiTv.vcf"
 
 echo $CMD >> $CORE_PATH/$PROJECT/command_lines.txt
 echo >> $CORE_PATH/$PROJECT/command_lines.txt
