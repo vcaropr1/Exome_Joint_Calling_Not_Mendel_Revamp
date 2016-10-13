@@ -9,10 +9,10 @@ PREFIX=$4
 
 ##############FIXED DIRECTORIES###############
 
-SCRIPT_DIR="/isilon/sequencing/VITO/GIT_REPO/Exome_Joint_Calling_Not_Mendel_Revamp/Standard_VQSR/Scripts/"
+SCRIPT_DIR="/isilon/sequencing/VITO/NEW_GIT_REPO/Exome_Joint_Calling_Not_Mendel_Revamp/Standard_VQSR/Scripts/"
 JAVA_1_7="/isilon/sequencing/Kurt/Programs/Java/jdk1.7.0_25/bin"
 JAVA_1_8="/isilon/sequencing/Kurt/Programs/Java/jdk1.8.0_73/bin"
-CORE_PATH="/isilon/sequencing/VITO/"
+CORE_PATH="/isilon/sequencing/Seq_Proj/"
 GATK_DIR="/isilon/sequencing/CIDRSeqSuiteSoftware/gatk/GATK_3/GenomeAnalysisTK-3.3-0"
 GATK_3_1_1_DIR="/isilon/sequencing/CIDRSeqSuiteSoftware/gatk/GATK_3/GenomeAnalysisTK-3.1-1"
 GATK_DIR_NIGHTLY="/isilon/sequencing/CIDRSeqSuiteSoftware/gatk/GATK_3/GenomeAnalysisTK-nightly-2015-01-15-g92376d3"
@@ -197,7 +197,7 @@ echo \
 ###########################################################################
 #################End of VQSR and Refinement Functions######################
 ###########################################################################
-
+#
 ###########################################################################
 ###################Start of Vcf Splitter Functions#########################
 ###########################################################################

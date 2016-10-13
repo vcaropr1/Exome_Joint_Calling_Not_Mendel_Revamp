@@ -19,18 +19,18 @@ TITV_BED=$8
 CMD=$JAVA_1_7'/java -jar'
 CMD=$CMD' '$GATK_DIR'/GenomeAnalysisTK.jar'
 CMD=$CMD' -T SelectVariants'
-CMD=$CMD'--disable_auto_index_creation_and_locking_when_reading_rods'
-CMD=$CMD'-et NO_ET'
-CMD=$CMD'-K '$KEY
-CMD=$CMD'-R '$REF_GENOME
-CMD=$CMD'-sn '$SM_TAG
-CMD=$CMD'-ef'
-CMD=$CMD'-env'
-CMD=$CMD'--keepOriginalAC'
-CMD=$CMD'-L '$TITV_BED
-CMD=$CMD'-selectType SNP'
-CMD=$CMD'--variant '$CORE_PATH'/'$PROJECT'/VCF/RELEASE/FILTERED_ON_BAIT/'$SM_TAG'_MS_OnBait.vcf'
-CMD=$CMD'-o '$CORE_PATH'/'$PROJECT'/TEMP/'$SM_TAG'.Release.OnExon.FILTERED.vcf'
+CMD=$CMD' --disable_auto_index_creation_and_locking_when_reading_rods'
+CMD=$CMD' -et NO_ET'
+CMD=$CMD' -K '$KEY
+CMD=$CMD' -R '$REF_GENOME
+CMD=$CMD' -sn '$SM_TAG
+CMD=$CMD' -ef'
+CMD=$CMD' -env'
+CMD=$CMD' --keepOriginalAC'
+CMD=$CMD' -L '$TITV_BED
+CMD=$CMD' -selectType SNP'
+CMD=$CMD' --variant '$CORE_PATH'/'$PROJECT'/VCF/RELEASE/FILTERED_ON_BAIT/'$SM_TAG'_MS_OnBait.vcf'
+CMD=$CMD' -o '$CORE_PATH'/'$PROJECT'/TEMP/'$SM_TAG'.Release.OnExon.FILTERED.vcf'
 
 # $JAVA_1_7/java -jar $GATK_DIR/GenomeAnalysisTK.jar \
 # -T SelectVariants \
