@@ -15,6 +15,8 @@ PREFIX=$7
 CHROMOSOME=$8
 DBSNP=$9
 
+# CMD=$CMD' -A HomopolymerRun' Taken out to mimic Hu Since this fails on chrom 19
+
 CMD=$JAVA_1_7'/java -jar'
 CMD=$CMD' '$GATK_DIR'/GenomeAnalysisTK.jar'
 CMD=$CMD' -T VariantAnnotator'
@@ -25,7 +27,6 @@ CMD=$CMD' -L '$CORE_PATH'/'$PROJECT'/TEMP/'$PREFIX'.'$CHROMOSOME'.temp.vcf'
 CMD=$CMD' -A GenotypeSummaries'
 CMD=$CMD' -A GCContent'
 CMD=$CMD' -A VariantType'
-CMD=$CMD' -A HomopolymerRun'
 CMD=$CMD' -A TandemRepeatAnnotator'
 CMD=$CMD' --disable_auto_index_creation_and_locking_when_reading_rods'
 CMD=$CMD' -et NO_ET'

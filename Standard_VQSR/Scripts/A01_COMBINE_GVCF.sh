@@ -14,7 +14,7 @@
 #$ -V
 
 # tell sge to submit at this priority setting
-#$ -p -10
+#$ -p -1000
 
 # tell sge to output both stderr and stdout to the same file
 #$ -j y

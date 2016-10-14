@@ -23,7 +23,6 @@ CMD=$CMD' --disable_auto_index_creation_and_locking_when_reading_rods'
 CMD=$CMD' -et NO_ET'
 CMD=$CMD' -K '$KEY
 CMD=$CMD' -R '$REF_GENOME
-CMD=$CMD' -sn '$SM_TAG
 CMD=$CMD' --variant '$CORE_PATH'/'$PROJECT'/VCF/RELEASE/FILTERED_ON_BAIT/'$SM_TAG'_MS_OnBait.vcf'
 CMD=$CMD' --excludeFiltered'
 CMD=$CMD' --excludeNonVariants'
@@ -39,7 +38,6 @@ CMD=$CMD' -o '$CORE_PATH'/'$PROJECT'/TEMP/'$SM_TAG'.Release.Known.TiTv.vcf'
 # -et NO_ET \
 # -K $KEY \
 # -R $REF_GENOME \
-# -sn $SM_TAG \
 # --variant $CORE_PATH/$PROJECT/VCF/RELEASE/FILTERED_ON_BAIT/$SM_TAG"_MS_OnBait.vcf" \
 # --excludeFiltered \
 # --excludeNonVariants \

@@ -23,7 +23,6 @@ CMD=$CMD' --disable_auto_index_creation_and_locking_when_reading_rods'
 CMD=$CMD' -et NO_ET'
 CMD=$CMD' -K '$KEY
 CMD=$CMD' -R '$REF_GENOME
-CMD=$CMD' -sn '$SM_TAG
 CMD=$CMD' -ef'
 CMD=$CMD' -env'
 CMD=$CMD' --keepOriginalAC'
@@ -38,7 +37,6 @@ CMD=$CMD' -o '$CORE_PATH'/'$PROJECT'/TEMP/'$SM_TAG'.Release.OnExon.FILTERED.vcf'
 # -et NO_ET \
 # -K $KEY \
 # -R $REF_GENOME \
-# -sn $SM_TAG \
 # -ef \
 # -env \
 # --keepOriginalAC \
