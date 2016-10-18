@@ -2,9 +2,6 @@
 
 PROJECT=$1
 SAMPLE_SHEET=$2
-# REF_GENOME=$3
-# DBSNP=$4
-# GVCF_LIST=$3
 PREFIX=$3
 
 ##############FIXED DIRECTORIES###############
@@ -13,6 +10,7 @@ SCRIPT_DIR="/isilon/sequencing/VITO/NEW_GIT_REPO/Exome_Joint_Calling_Not_Mendel_
 JAVA_1_7="/isilon/sequencing/Kurt/Programs/Java/jdk1.7.0_25/bin"
 JAVA_1_8="/isilon/sequencing/Kurt/Programs/Java/jdk1.8.0_73/bin"
 CORE_PATH="/isilon/sequencing/Seq_Proj/"
+BEDTOOLS_DIR="/isilon/sequencing/Kurt/Programs/PATH"
 GATK_DIR="/isilon/sequencing/CIDRSeqSuiteSoftware/gatk/GATK_3/GenomeAnalysisTK-3.3-0"
 GATK_3_1_1_DIR="/isilon/sequencing/CIDRSeqSuiteSoftware/gatk/GATK_3/GenomeAnalysisTK-3.1-1"
 GATK_DIR_NIGHTLY="/isilon/sequencing/CIDRSeqSuiteSoftware/gatk/GATK_3/GenomeAnalysisTK-nightly-2015-01-15-g92376d3"
@@ -42,53 +40,70 @@ VERACODE_CSV=/isilon/sequencing/CIDRSeqSuiteSoftware/resources/Veracode_hg18_hg1
 
 CREATE_PROJECT_INFO_ARRAY ()
 {
-PROJECT_INFO_ARRAY=(`sed 's/\r//g' $SAMPLE_SHEET | awk 'BEGIN{FS=","} NR>1 {print $1,$12,$18}' | sed 's/,/\t/g' | sort -k 1,1 | awk '$1=="'$PROJECT'" {print $1,$2,$3}' | sort | uniq`)
+PROJECT_INFO_ARRAY=(`sed 's/\r//g' $SAMPLE_SHEET | awk 'BEGIN{FS=","} NR>1 {print $1,$12,$18,$16}' | sed 's/,/\t/g' | sort -k 1,1 | awk '$1=="'$PROJECT'" {print $1,$2,$3,$4}' | sort | uniq`)
 
 PROJECT_NAME=${PROJECT_INFO_ARRAY[0]}
 REF_GENOME=${PROJECT_INFO_ARRAY[1]}
 PROJECT_DBSNP=${PROJECT_INFO_ARRAY[2]}
+PROJECT_BAIT_BED=${PROJECT_INFO_ARRAY[3]}
 }
 
 CREATE_GVCF_LIST(){
 TOTAL_SAMPLES=(`awk 'BEGIN{FS=","} NR>1{print $1,$8}' $SAMPLE_SHEET | sort | uniq | wc -l`)
-awk 'BEGIN{FS=","} NR>1{print $1,$8}' $SAMPLE_SHEET | sort | uniq | awk 'BEGIN{OFS="/"}{print "'$CORE_PATH'",$1,"GVCF",$2,".genome.vcf"}' \
+awk 'BEGIN{FS=","} NR>1{print $1,$8}' $SAMPLE_SHEET | sort | uniq | awk 'BEGIN{OFS="/"}{print "'$CORE_PATH'",$1,"GVCF",$2".genome.vcf"}' \
 >| $CORE_PATH'/'$PROJECT'/'$TOTAL_SAMPLES'.samples.gvcf.list'
 GVCF_LIST=(`echo $CORE_PATH'/'$PROJECT'/'$TOTAL_SAMPLES'.samples.gvcf.list'`)
+}
+
+FORMAT_AND_SCATTER_BAIT_BED() {
+BED_FILE_PREFIX=(`echo SPLITTED_BED_FILE`)
+
+awk 1 $PROJECT_BAIT_BED \
+| sed -r 's/\r//g ; s/chr//g ; s/[[:space:]]+/\t/g' \
+| sort -k1,1 -k2,2n \
+| $BEDTOOLS_DIR/bedtools merge -i - \
+>| $CORE_PATH/$PROJECT/TEMP/FORMATTED_BED_FILE.bed
+
+INTERVALS_DIVIDED=`wc -l $CORE_PATH/$PROJECT/TEMP/FORMATTED_BED_FILE.bed | awk '{print $1"/100"}' | bc | awk '{print $0+1}'`
+
+split -l $INTERVALS_DIVIDED -d  $CORE_PATH/$PROJECT/TEMP/FORMATTED_BED_FILE.bed $CORE_PATH/$PROJECT/TEMP/$BED_FILE_PREFIX
+
+ls $CORE_PATH/$PROJECT/TEMP/$BED_FILE_PREFIX* | awk '{print "mv",$0,$0".bed"}' | bash
 }
 
 COMBINE_GVCF(){
 echo \
  qsub \
- -N 'A01_COMBINE_GVCF_'$PROJECT'_chr'$CHROMOSOME \
- -j y -o $CORE_PATH/$PROJECT/LOGS/A01_COMBINE_GVCF_chr$CHROMOSOME.log \
+ -N 'A01_COMBINE_GVCF_'$PROJECT'_'$BED_FILE_NAME \
+ -j y -o $CORE_PATH/$PROJECT/LOGS/A01_COMBINE_GVCF_$BED_FILE_NAME.log \
  $SCRIPT_DIR/A01_COMBINE_GVCF.sh \
  $JAVA_1_7 $GATK_DIR $REF_GENOME \
  $KEY $CORE_PATH $PROJECT_NAME $GVCF_LIST \
- $PREFIX $CHROMOSOME
+ $PREFIX $BED_FILE_NAME
  }
 
 GENOTYPE_GVCF(){
 echo \
  qsub \
- -N B02_GENOTYPE_GVCF_$PROJECT"_chr"$CHROMOSOME \
- -hold_jid A01_COMBINE_GVCF_$PROJECT"_chr"$CHROMOSOME \
- -j y -o $CORE_PATH/$PROJECT/LOGS/B02_GENOTYPE_GVCF_chr$CHROMOSOME.log \
+ -N B02_GENOTYPE_GVCF_$PROJECT'_'$BED_FILE_NAME \
+ -hold_jid A01_COMBINE_GVCF_$PROJECT'_'$BED_FILE_NAME \
+ -j y -o $CORE_PATH/$PROJECT/LOGS/B02_GENOTYPE_GVCF_$BED_FILE_NAME.log \
  $SCRIPT_DIR/B02_GENOTYPE_GVCF.sh \
  $JAVA_1_7 $GATK_DIR $REF_GENOME \
  $KEY $CORE_PATH $PROJECT_NAME \
- $PREFIX $CHROMOSOME
+ $PREFIX $BED_FILE_NAME
 }
 
 VARIANT_ANNOTATOR(){
 echo \
  qsub \
- -N C03_VARIANT_ANNOTATOR_$PROJECT"_chr"$CHROMOSOME \
- -hold_jid B02_GENOTYPE_GVCF_$PROJECT"_chr"$CHROMOSOME \
- -j y -o $CORE_PATH/$PROJECT/LOGS/C03_VARIANT_ANNOTATOR_chr$CHROMOSOME.log \
+ -N C03_VARIANT_ANNOTATOR_$PROJECT'_'$BED_FILE_NAME \
+ -hold_jid B02_GENOTYPE_GVCF_$PROJECT'_'$BED_FILE_NAME \
+ -j y -o $CORE_PATH/$PROJECT/LOGS/C03_VARIANT_ANNOTATOR_$BED_FILE_NAME.log \
  $SCRIPT_DIR/C03_VARIANT_ANNOTATOR.sh \
  $JAVA_1_7 $GATK_DIR $REF_GENOME \
  $KEY $CORE_PATH $PROJECT_NAME \
- $PREFIX $CHROMOSOME $PROJECT_DBSNP
+ $PREFIX $BED_FILE_NAME $PROJECT_DBSNP
 }
 
 ##############################################################################
@@ -100,7 +115,7 @@ echo \
 ##############################################################################
 
 GENERATE_CAT_VARIANTS_HOLD_ID(){
-CAT_VARIANTS_HOLD_ID=$CAT_VARIANTS_HOLD_ID'C03_VARIANT_ANNOTATOR_'$PROJECT'_chr'$CHROMOSOME','
+CAT_VARIANTS_HOLD_ID=$CAT_VARIANTS_HOLD_ID'C03_VARIANT_ANNOTATOR_'$PROJECT'_'$BED_FILE_NAME','
 }
 
 CAT_VARIANTS(){
@@ -111,7 +126,7 @@ echo \
  -j y -o $CORE_PATH/$PROJECT/LOGS/D04_CAT_VARIANTS.log \
  $SCRIPT_DIR/D04_CAT_VARIANTS.sh \
  $JAVA_1_7 $GATK_DIR $KEY $REF_GENOME \
- $CORE_PATH $PROJECT_NAME $PREFIX
+ $CORE_PATH $PROJECT_NAME $PREFIX $BED_FILE_PREFIX
 }
 
 VARIANT_RECALIBRATOR_SNV() {
@@ -384,10 +399,13 @@ echo \
 ##########################################################################
 
 CREATE_PROJECT_INFO_ARRAY
+FORMAT_AND_SCATTER_BAIT_BED
 CREATE_GVCF_LIST
 
-for CHROMOSOME in {{1..22},{X,Y}};
+
+for BED_FILE in $(ls $CORE_PATH/$PROJECT/TEMP/SPLITTED_BED_FILE*);
  do
+BED_FILE_NAME=$(basename $BED_FILE .bed)
 COMBINE_GVCF
 GENOTYPE_GVCF
 VARIANT_ANNOTATOR
