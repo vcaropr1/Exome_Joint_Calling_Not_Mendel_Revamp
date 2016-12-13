@@ -45,6 +45,6 @@ CMD=$CMD' -o '$CORE_PATH'/'$PROJECT'/VCF/RELEASE/FILTERED_ON_TARGET/'$SM_TAG'_MS
 # --variant $CORE_PATH/$PROJECT/VCF/RELEASE/FILTERED_ON_BAIT/$SM_TAG"_MS_OnBait.vcf" \
 # -o $CORE_PATH/$OUT_PROJECT/VCF/RELEASE/FILTERED_ON_TARGET/$SM_TAG"_MS_OnTarget.vcf"
 
-# echo $CMD >> $CORE_PATH'/'$PROJECT'/'command_lines.txt
-# echo >> $CORE_PATH'/'$PROJECT'/'command_lines.txt
+echo $CMD >> $CORE_PATH'/'$PROJECT'/'command_lines.txt
+echo >> $CORE_PATH'/'$PROJECT'/'command_lines.txt
 echo $CMD | bash

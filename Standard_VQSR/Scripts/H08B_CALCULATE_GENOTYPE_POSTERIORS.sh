@@ -25,7 +25,7 @@ CMD=$CMD' --supporting '$ExAC
 CMD=$CMD' --disable_auto_index_creation_and_locking_when_reading_rods'
 CMD=$CMD' -et NO_ET'
 CMD=$CMD' -K '$KEY
-CMD=$CMD' -o '$CORE_PATH'/'$PROJECT'/MULTI_SAMPLE/'$PREFIX'.BEDsuperset.VQSR.1KG.ExAC3.REFINED.temp.vcf'
+CMD=$CMD' -o '$CORE_PATH'/'$PROJECT'/TEMP/'$PREFIX'.BEDsuperset.VQSR.1KG.ExAC3.REFINED.temp.vcf'
 
 
 # $JAVA_1_7/java -jar $GATK_DIR_NIGHTLY/GenomeAnalysisTK.jar \

@@ -4,8 +4,6 @@
 #$ -V
 #$ -p -1000
 
-source /u01/home/khetrick/bashrc_change_R
-
 JAVA_1_7=$1
 GATK_DIR=$2
 REF_GENOME=$3
@@ -20,11 +18,11 @@ CMD=$CMD' -T ApplyRecalibration'
 CMD=$CMD' -R '$REF_GENOME
 CMD=$CMD' --input:VCF '$CORE_PATH'/'$PROJECT'/MULTI_SAMPLE/'$PREFIX'.raw.HC.vcf'
 CMD=$CMD' --ts_filter_level 99.5'
-CMD=$CMD' -recalFile '$CORE_PATH'/'$PROJECT'/MULTI_SAMPLE/'$PREFIX'.HC.SNV.recal'
-CMD=$CMD' -tranchesFile '$CORE_PATH'/'$PROJECT'/MULTI_SAMPLE/'$PREFIX'.HC.SNV.tranches'
+CMD=$CMD' -recalFile '$CORE_PATH'/'$PROJECT'/MULTI_SAMPLE/'$PREFIX'.HC.SNP.recal'
+CMD=$CMD' -tranchesFile '$CORE_PATH'/'$PROJECT'/MULTI_SAMPLE/'$PREFIX'.HC.SNP.tranches'
 CMD=$CMD' --disable_auto_index_creation_and_locking_when_reading_rods'
 CMD=$CMD' -mode SNP'
-CMD=$CMD' -o '$CORE_PATH'/'$PROJECT'/MULTI_SAMPLE/'$PREFIX'.HC.SNV.VQSR.vcf'
+CMD=$CMD' -o '$CORE_PATH'/'$PROJECT'/TEMP/'$PREFIX'.HC.SNP.VQSR.vcf'
 
 
 

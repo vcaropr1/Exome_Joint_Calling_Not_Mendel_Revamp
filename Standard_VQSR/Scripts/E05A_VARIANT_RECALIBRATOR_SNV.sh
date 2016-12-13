@@ -4,6 +4,8 @@
 #$ -V
 #$ -p -1000
 
+export PATH=.:/isilon/sequencing/peng/softwares/R-3.1.1/bin:$PATH
+
 JAVA_1_7=$1
 GATK_DIR=$2
 KEY=$3
@@ -49,10 +51,10 @@ CMD=$CMD' -tranche 97.0'
 CMD=$CMD' -tranche 96.0'
 CMD=$CMD' -tranche 95.0'
 CMD=$CMD' -tranche 90.0'
-CMD=$CMD' -recalFile '$CORE_PATH'/'$PROJECT'/MULTI_SAMPLE/'$PREFIX'.HC.SNV.recal'
-CMD=$CMD' -tranchesFile '$CORE_PATH'/'$PROJECT'/MULTI_SAMPLE/'$PREFIX'.HC.SNV.tranches'
+CMD=$CMD' -recalFile '$CORE_PATH'/'$PROJECT'/MULTI_SAMPLE/'$PREFIX'.HC.SNP.recal'
+CMD=$CMD' -tranchesFile '$CORE_PATH'/'$PROJECT'/MULTI_SAMPLE/'$PREFIX'.HC.SNP.tranches'
 CMD=$CMD' --disable_auto_index_creation_and_locking_when_reading_rods'
-CMD=$CMD' -rscriptFile '$CORE_PATH'/'$PROJECT'/MULTI_SAMPLE/'$PREFIX'.HC.SNV.R'
+CMD=$CMD' -rscriptFile '$CORE_PATH'/'$PROJECT'/MULTI_SAMPLE/'$PREFIX'.HC.SNP.R'
 
 
 # $JAVA_1_7/java -jar $GATK_DIR/GenomeAnalysisTK.jar \

@@ -4,6 +4,8 @@
 #$ -V
 #$ -p -1000
 
+export PATH=.:/isilon/sequencing/peng/softwares/R-3.1.1/bin:$PATH
+
 JAVA_1_7=$1
 GATK_DIR=$2
 KEY=$3
