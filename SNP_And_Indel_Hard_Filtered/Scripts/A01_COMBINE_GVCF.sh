@@ -35,7 +35,8 @@ BED_FILE_NAME=$9
 
 mkdir -p $CORE_PATH/$PROJECT/GVCF/AGGREGATE
 mkdir -p $CORE_PATH/$PROJECT/MULTI_SAMPLE
-mkdir -p $CORE_PATH/$PROJECT/TEMP     
+mkdir -p $CORE_PATH/$PROJECT/TEMP
+mkdir -p $CORE_PATH/$PROJECT/REPORTS     
 
 
 START_COMBINE_GVCF=`date '+%s'`
@@ -45,7 +46,7 @@ CMD=$CMD' '$GATK_DIR'/GenomeAnalysisTK.jar'
 CMD=$CMD' -T CombineGVCFs'
 CMD=$CMD' -R '$REF_GENOME
 CMD=$CMD' --variant '$GVCF_LIST
-CMD=$CMD' -L '$CORE_PATH/$PROJECT/TEMP/$BED_FILE_NAME'.bed'
+CMD=$CMD' -L '$CORE_PATH/$PROJECT/TEMP/BED_FILE_SPLIT/$BED_FILE_NAME'.bed'
 CMD=$CMD' --disable_auto_index_creation_and_locking_when_reading_rods'
 CMD=$CMD' -et NO_ET'
 CMD=$CMD' -K '$KEY
