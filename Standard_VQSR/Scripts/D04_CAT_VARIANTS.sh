@@ -26,10 +26,9 @@ CMD=$CMD' -cp '$GATK_3_3_DIR'/GenomeAnalysisTK.jar'
 CMD=$CMD' org.broadinstitute.gatk.tools.CatVariants'
 CMD=$CMD' -R '$REF_GENOME
 CMD=$CMD' -assumeSorted'
-while [ $# -gt 0 ]
+for VCF in $(ls $CORE_PATH/$PROJECT/TEMP/AGGREGATE/$PREFIX'.SPLITTED_BED_FILE'*.vcf)
 do
-  CMD=$CMD' --variant '$1
-  shift
+  CMD=$CMD' --variant '$VCF
 done
 CMD=$CMD' -out '$CORE_PATH'/'$PROJECT'/MULTI_SAMPLE/'$PREFIX'.raw.HC.vcf'
 

@@ -32,7 +32,7 @@ CMD=$CMD' -A HomopolymerRun'
 CMD=$CMD' --disable_auto_index_creation_and_locking_when_reading_rods'
 CMD=$CMD' -et NO_ET'
 CMD=$CMD' -K '$KEY
-CMD=$CMD' -o '$CORE_PATH'/'$PROJECT'/TEMP/'$PREFIX'.'$BED_FILE_NAME
+CMD=$CMD' -o '$CORE_PATH'/'$PROJECT'/TEMP/AGGREGATE/'$PREFIX'.'$BED_FILE_NAME
 CMD=$CMD'.normal.vcf'
 
 # $JAVA_1_7/java -jar $GATK_DIR/GenomeAnalysisTK.jar \
