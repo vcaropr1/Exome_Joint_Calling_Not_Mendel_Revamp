@@ -31,22 +31,6 @@ CMD=$CMD' -L '$TARGET_BED
 CMD=$CMD' --variant '$CORE_PATH'/'$PROJECT'/VCF/RELEASE/FILTERED_ON_BAIT/'$SM_TAG'_MS_OnBait.vcf'
 CMD=$CMD' -o '$CORE_PATH'/'$PROJECT'/INDEL/RELEASE/FILTERED_ON_TARGET/'$SM_TAG'_MS_OnTarget_INDEL.vcf'
 
-
-# $JAVA_1_7/java -jar $GATK_DIR/GenomeAnalysisTK.jar \
-# -T SelectVariants \
-# --disable_auto_index_creation_and_locking_when_reading_rods \
-# -et NO_ET \
-# -K $KEY \
-# -R $REF_GENOME \
-# -sn $SM_TAG \
-# -ef \
-# -env \
-# --keepOriginalAC \
-# -selectType INDEL \
-# -L $TARGET_BED \
-# --variant $CORE_PATH/$PROJECT/VCF/RELEASE/FILTERED_ON_BAIT/$SM_TAG"_MS_OnBait.vcf" \
-# -o $CORE_PATH/$PROJECT/INDEL/RELEASE/FILTERED_ON_TARGET/$SM_TAG"_MS_OnTarget_INDEL.vcf"
-
 echo $CMD >> $CORE_PATH/$PROJECT/command_lines.txt
 echo >> $CORE_PATH/$PROJECT/command_lines.txt
 echo $CMD | bash

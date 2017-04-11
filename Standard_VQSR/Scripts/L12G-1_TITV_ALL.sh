@@ -13,9 +13,6 @@ SM_TAG=$4
 CMD=$SAMTOOLS_DIR'/bcftools/vcfutils.pl qstats '$CORE_PATH'/'$PROJECT'/TEMP/'$SM_TAG'.Release.OnExon.FILTERED.vcf'
 CMD=$CMD' >| '$CORE_PATH'/'$PROJECT'/REPORTS/TI_TV_MS/'$SM_TAG'_All_.titv.txt'
 
-# $SAMTOOLS_DIR/bcftools/vcfutils.pl qstats $CORE_PATH/$PROJECT/TEMP/$SM_TAG".Release.OnExon.FILTERED.vcf" >| \
-# $CORE_PATH/$PROJECT/REPORTS/TI_TV_MS/$SM_TAG"_All_.titv.txt"
-
 echo $CMD >> $CORE_PATH/$PROJECT/command_lines.txt
 echo >> $CORE_PATH/$PROJECT/command_lines.txt
 echo $CMD | bash

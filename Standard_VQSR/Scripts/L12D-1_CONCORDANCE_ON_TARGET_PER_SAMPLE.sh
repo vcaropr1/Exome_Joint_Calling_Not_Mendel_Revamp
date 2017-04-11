@@ -32,15 +32,6 @@ echo $CMD >> $CORE_PATH/$PROJECT/command_lines.txt
 echo >> $CORE_PATH/$PROJECT/command_lines.txt
 echo $CMD | bash
 
-# $CIDR_SEQSUITE_JAVA_DIR/java -jar \
-# $CIDR_SEQSUITE_6_1_1_DIR/CIDRSeqSuite.jar \
-# -pipeline -concordance \
-# $CORE_PATH/$PROJECT/TEMP/$SM_TAG \
-# $CORE_PATH/$PROJECT/Pretesting/Final_Genotyping_Reports/ \
-# $CORE_PATH/$PROJECT/TEMP/$SM_TAG \
-# $TARGET_BED \
-# $VERACODE_CSV
-
 mv $CORE_PATH/$PROJECT/TEMP/$SM_TAG/$SM_TAG"_concordance.csv" \
 $CORE_PATH/$PROJECT/REPORTS/CONCORDANCE_MS/$SM_TAG"_concordance.csv"
 

@@ -28,15 +28,15 @@ CIDR_SEQSUITE_6_1_1_DIR="/isilon/sequencing/CIDRSeqSuiteSoftware/RELEASES/6.1.1"
 ##############FIXED FILE PATHS################
 
 KEY="/isilon/sequencing/CIDRSeqSuiteSoftware/gatk/GATK_2/lee.watkins_jhmi.edu.key"
-HAPMAP_VCF=/isilon/sequencing/GATK_resource_bundle/2.5/b37/hapmap_3.3.b37.vcf
-OMNI_VCF=/isilon/sequencing/GATK_resource_bundle/2.5/b37/1000G_omni2.5.b37.vcf
-ONEKG_SNPS_VCF=/isilon/sequencing/GATK_resource_bundle/2.5/b37/1000G_phase1.snps.high_confidence.b37.vcf
-DBSNP_138_VCF=/isilon/sequencing/GATK_resource_bundle/2.8/b37/dbsnp_138.b37.vcf
-ONEKG_INDELS_VCF=/isilon/sequencing/GATK_resource_bundle/2.2/b37/Mills_and_1000G_gold_standard.indels.b37.vcf
+HAPMAP_VCF="/isilon/sequencing/GATK_resource_bundle/2.5/b37/hapmap_3.3.b37.vcf"
+OMNI_VCF="/isilon/sequencing/GATK_resource_bundle/2.5/b37/1000G_omni2.5.b37.vcf"
+ONEKG_SNPS_VCF="/isilon/sequencing/GATK_resource_bundle/2.5/b37/1000G_phase1.snps.high_confidence.b37.vcf"
+DBSNP_138_VCF="/isilon/sequencing/GATK_resource_bundle/2.8/b37/dbsnp_138.b37.vcf"
+ONEKG_INDELS_VCF="/isilon/sequencing/GATK_resource_bundle/2.2/b37/Mills_and_1000G_gold_standard.indels.b37.vcf"
 P3_1KG="/isilon/sequencing/1000genomes/Full_Project/Sep_2014/20130502/ALL.wgs.phase3_shapeit2_mvncall_integrated_v5.20130502.sites.vcf.gz"
 ExAC="/isilon/sequencing/ExAC/Release_0.3/ExAC.r0.3.sites.vep.vcf.gz"
-KNOWN_SNPS=/isilon/sequencing/GATK_resource_bundle/2.8/b37/dbsnp_138.b37.excluding_sites_after_129.vcf
-VERACODE_CSV=/isilon/sequencing/CIDRSeqSuiteSoftware/resources/Veracode_hg18_hg19.csv
+KNOWN_SNPS="/isilon/sequencing/GATK_resource_bundle/2.8/b37/dbsnp_138.b37.excluding_sites_after_129.vcf"
+VERACODE_CSV="/isilon/sequencing/CIDRSeqSuiteSoftware/resources/Veracode_hg18_hg19.csv"
 
 
 ############################################################################
@@ -70,11 +70,7 @@ awk '$1=="Y"' $CORE_PATH/$PROJECT/TEMP/BED_FILE_SPLIT/FORMATTED_BED_FILE.bed | s
 awk '$1=="MT"' $CORE_PATH/$PROJECT/TEMP/BED_FILE_SPLIT/FORMATTED_BED_FILE.bed | sort -k 2,2n) \
 >| $CORE_PATH/$PROJECT/TEMP/BED_FILE_SPLIT/FORMATTED_AND_SORTED_BED_FILE.bed
 
-
-# INTERVALS_DIVIDED=`wc -l $CORE_PATH/$PROJECT/TEMP/BED_FILE_SPLIT/FORMATTED_AND_SORTED_BED_FILE.bed | awk '{print $1"/100"}' | bc | awk '{print $0+1}'`
-
-# split -l $INTERVALS_DIVIDED -d  $CORE_PATH/$PROJECT/TEMP/BED_FILE_SPLIT/FORMATTED_AND_SORTED_BED_FILE.bed $CORE_PATH/$PROJECT/TEMP/BED_FILE_SPLIT/$BED_FILE_PREFIX
-
+# Determining how many records will be in each mini-bed file.  The +1 at the end is to round up the number of records per mini-bed file to ensure all records are captured.  So the last mini-bed file will be smaller.
 INTERVALS_DIVIDED=`wc -l $CORE_PATH/$PROJECT/TEMP/BED_FILE_SPLIT/FORMATTED_AND_SORTED_BED_FILE.bed | awk '{print $1"/""'$NUMBER_OF_BED_FILES'"}' | bc | awk '{print $0+1}'`
 
 split -l $INTERVALS_DIVIDED -a 4 -d  $CORE_PATH/$PROJECT/TEMP/BED_FILE_SPLIT/FORMATTED_AND_SORTED_BED_FILE.bed $CORE_PATH/$PROJECT/TEMP/BED_FILE_SPLIT/$BED_FILE_PREFIX
@@ -138,15 +134,6 @@ echo \
  $SCRIPT_DIR/D04_CAT_VARIANTS.sh \
  $JAVA_1_7 $GATK_DIR $REF_GENOME \
  $CORE_PATH $PROJECT_NAME $PREFIX
-
-# echo \
-#  qsub \
-#  -N D04_CAT_VARIANTS_$PROJECT \
-#  -hold_jid $CAT_VARIANTS_HOLD_ID \
-#  -j y -o $CORE_PATH/$PROJECT/LOGS/D04_CAT_VARIANTS.log \
-#  $SCRIPT_DIR/D04_CAT_VARIANTS.sh \
-#  $JAVA_1_7 $GATK_DIR $KEY $REF_GENOME \
-#  $CORE_PATH $PROJECT_NAME $PREFIX $BED_FILE_PREFIX
  }
 
 VARIANT_RECALIBRATOR_SNV() {
@@ -426,10 +413,10 @@ fi
 
 mkdir -p $CORE_PATH/$PROJECT/TEMP/BED_FILE_SPLIT
 mkdir -p $CORE_PATH/$PROJECT/TEMP/AGGREGATE
+
 CREATE_PROJECT_INFO_ARRAY
 FORMAT_AND_SCATTER_BAIT_BED
 CREATE_GVCF_LIST
-
 
 for BED_FILE in $(ls $CORE_PATH/$PROJECT/TEMP/BED_FILE_SPLIT/SPLITTED_BED_FILE*);
  do
@@ -468,39 +455,3 @@ PASSING_SNVS_TITV_NOVEL
 TITV_NOVEL
 CONCORDANCE_ON_TARGET_PER_SAMPLE
 done
-
-# Chromosome loop for the COMBINE_GVCF (REPLACES SUBMITTER_COMBINE_GVCF.sh and COMBINE_GVCF.sh)
-# 	Breakout COMBINE GVCF to:
-# 			   COMBINE_GVCF
-# 			   GENOTYPE_GVCF    (DEPENDENT ON COMBINE_GVCF)
-# 			   VARIANT_ANNOTATOR (DEPENDENT ON GENOTYPE_GVCF)
-#
-# ### Next breakdown VQSR.GATK-3.3-0_CGP_26April2015.sh
-# 		CATVARIANTS
-# 		VARIANT_RECAL_SNV (DEPENDENT ON CATVARIANTS)
-# 		VARIANT_RECAL_INDEL (DEPENDENT ON CATVARIANTS)
-# 		APPLY_SNV (DEPENDENT ON VARIANT_RECAL_SNV)
-# 		APPLY_INDEL (DEPENDENT ON VARIANT_RECA_INDEL && APPLY_SNV)
-# 		BGZIP&TABIX (DEPENDENT ON APPLY_INDEL)
-# 		CALCULATE_GENOTYPE_POSTERIORS (DEPENDENT ON APPLY_INDEL)
-# 		VARIANT_ANNOTATOR (CALCULATE_GENOTYPE_POSTERIORS)
-# 		BGZIP&TABIX (DEPENDENT ON VARIANT_ANNOTATOR)
-#
-# ### Next breakdown of VCF.Splitter.NEW.PIPELINE.HC.bam.sh (Also to replace the SUBMITTER)
-# 		## Note: All these files can either:
-# 							# A: Run off of the refined VQSR (big vcf)
-# 							# B: Run off the 1st step vcf that has the extracted the passing variants for one sample ( I like this more to try 1st)
-# 		SELECT_PASSING_VARIANTS (DEPENDENT ON CALCULATE_GENOTYPE_POSTERIORS)
-# 		BGZIP_AND_TABIX (DEPENDENT ON SELECT_PASSING_VARIANTS)
-# 		PASSING_VARIANTS_ON_TARGET_BY_SAMPLE (DEPENDENT ON COMBINE_VARIANTS OR CALCULATE_GENOTYPE_POSTERIORS)
-# 		PASSING_SNVS_ON_BAIT_BY_SAMPLE (DEPENDENT ON COMBINE_VARIANTS OR CALCULATE_GENOTYPE_POSTERIORS)
-# 		PASSING_SNVS_ON_TARGET_BY_SAMPLE (DEPENDENT ON COMBINE_VARIANTS OR CALCULATE_GENOTYPE_POSTERIORS)
-# 		PASSING_INDELS_ON_BAIT_BY_SAMPLE (DEPENDENT ON COMBINE_VARIANTS OR CALCULATE_GENOTYPE_POSTERIORS)
-# 		PASSING_INDELS_ON_TARGET_BY_SAMPLE (DEPENDENT ON COMBINE_VARIANTS OR CALCULATE_GENOTYPE_POSTERIORS)
-# 		PASSING_SNVS_TITV_ALL (DEPENDENT ON COMBINE_VARIANTS OR CALCULATE_GENOTYPE_POSTERIORS)
-# 		TITV_ALL (DEPENDENT ON PASSING_SNVS_TITV_ALL)
-# 		PASSING_SNVS_TITV_KNOWN (DEPENDENT ON COMBINE_VARIANTS OR CALCULATE_GENOTYPE_POSTERIORS)
-# 		TITV_KNOWN (DEPENDENT ON PASSING_SNVS_TITV_KNOWN)
-# 		PASSING_SNVS_TITV_NOVEL (DEPENDENT ON COMBINE_VARIANTS OR CALCULATE_GENOTYPE_POSTERIORS)
-# 		TITV_NOVEL (DEPENDENT ON PASSING_SNVS_TITV_NOVEL)
-# 		CONCORDANCE_ON_TARGET_PER_SAMPLE (DEPENDENT ON TITV_NOVEL,TITV_KNOWN,TITV_ALL)

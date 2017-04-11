@@ -35,22 +35,6 @@ CMD=$CMD' -K '$KEY
 CMD=$CMD' -o '$CORE_PATH'/'$PROJECT'/TEMP/AGGREGATE/'$PREFIX'.'$BED_FILE_NAME
 CMD=$CMD'.normal.vcf'
 
-# $JAVA_1_7/java -jar $GATK_DIR/GenomeAnalysisTK.jar \
-# -T VariantAnnotator \
-# -R $REF_GENOME \
-# --variant $CORE_PATH/$PROJECT/TEMP/$PREFIX"."$CHROMOSOME".temp.vcf" \
-# --dbsnp $DBSNP \
-# -L $CORE_PATH/$PROJECT/TEMP/$PREFIX"."$CHROMOSOME".temp.vcf" \
-# -A GenotypeSummaries \
-# -A GCContent \
-# -A VariantType \
-# -A HomopolymerRun \
-# -A TandemRepeatAnnotator \
-# --disable_auto_index_creation_and_locking_when_reading_rods \
-# -et NO_ET \
-# -K $KEY \
-# -o $CORE_PATH/$PROJECT/MULTI_SAMPLE/$PREFIX"."$CHROMOSOME".normal.vcf"
-
 echo $CMD >> $CORE_PATH/$PROJECT/command_lines.txt
 echo >> $CORE_PATH/$PROJECT/command_lines.txt
 echo $CMD | bash

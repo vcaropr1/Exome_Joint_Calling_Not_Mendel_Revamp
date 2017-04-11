@@ -31,21 +31,6 @@ CMD=$CMD' --discordance '$KNOWN_SNPS
 CMD=$CMD' -selectType SNP'
 CMD=$CMD' -o '$CORE_PATH'/'$PROJECT'/TEMP/'$SM_TAG'.Release.Novel.TiTv.vcf'
 
-# $JAVA_1_7/java -jar $GATK_DIR/GenomeAnalysisTK.jar \
-# -T SelectVariants \
-# --disable_auto_index_creation_and_locking_when_reading_rods \
-# -et NO_ET \
-# -K $KEY \
-# -R $REF_GENOME \
-# --variant $CORE_PATH/$PROJECT/VCF/RELEASE/FILTERED_ON_BAIT/$SM_TAG"_MS_OnBait.vcf" \
-# --excludeFiltered \
-# --excludeNonVariants \
-# --keepOriginalAC \
-# -L $TITV_BED \
-# --discordance $KNOWN_SNPS \
-# -selectType SNP \
-# -o $CORE_PATH/$PROJECT/TEMP/$SM_TAG".Release.Novel.TiTv.vcf"
-
 echo $CMD >> $CORE_PATH/$PROJECT/command_lines.txt
 echo >> $CORE_PATH/$PROJECT/command_lines.txt
 echo $CMD | bash
